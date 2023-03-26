@@ -1,0 +1,48 @@
+version: '3.8'
+
+volumes:
+  postgres-volume:
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    ports:
+      - 5173:5173
+    depends_on:
+      - db
+    volumes:
+      - ./src/:/var/www/html
+    environment:
+      - DB_CONNECTION=pgsql
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=${DB_NAME}
+      - DB_USERNAME=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    ports:
+      - ${WEB_PORT}:80
+    depends_on:
+      - api
+    volumes:
+      - ./src/:/var/www/html
+
+  db:
+    build:
+      context: .
+      dockerfile: ./docker/postgres/Dockerfile
+    ports:
+      - ${DB_PORT}:5432
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      PGTZ: 'Asia/Tokyo'
+    volumes:
+      - postgres-volume:/var/lib/postgresql
