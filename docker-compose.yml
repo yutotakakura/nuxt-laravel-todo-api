@@ -7,9 +7,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: ./docker/php/Dockerfile
-    ports:
-      - 5173:5173
+      dockerfile: ./docker/api/Dockerfile
     depends_on:
       - db
     volumes:
@@ -36,7 +34,7 @@ services:
   db:
     build:
       context: .
-      dockerfile: ./docker/postgres/Dockerfile
+      dockerfile: ./docker/db/Dockerfile
     ports:
       - ${DB_PORT}:5432
     environment:
