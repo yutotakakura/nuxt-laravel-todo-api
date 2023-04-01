@@ -11,7 +11,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./src/:/var/www/html
+      - ./src/:/app
     environment:
       - DB_CONNECTION=pgsql
       - DB_HOST=db

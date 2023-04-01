@@ -1,8 +1,12 @@
-FROM nginx:1.23.2-alpine
+FROM nginx:1.23-alpine
 
 ENV TZ=UTC
 
 # nginx config file
-COPY ./docker/nginx/*.conf /etc/nginx/conf.d/
+# local
+# COPY ./conf/local/*.conf /etc/nginx/conf.d/
+
+# ecs
+COPY ./conf/ecs/*.conf /etc/nginx/conf.d/
 
 WORKDIR /var/www/html
